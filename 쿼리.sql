@@ -1,192 +1,57 @@
-SHOW DATABASES;
-SHOW TABLES;
-### 1. 기본 형식 
-# SELECT는 테이블의 데이터를 읽어 출력하는 이 동작을 조회라고 함. 
-# 테이블을 조회하는 것은 가장 기본적인 동작이며 SELECT 문은 모든 SQL 명령중 사 용 빈도가 압도적으로 높음
-# 도시명과 인구수에만 관심이 있다면.
+# 조건문 
+# 1. 필드 비교
+# WHERE 절은 읽을 레코드의 조건을 지정. 
+# 필드 목록은 읽을 열을 지정하는데 비해 WHERE 절은 읽을 행을 지정.
+# WHERE 절이 없으면 모든 레코드를 다 조회. 
 
+# SELECT 명령은 조건에 맞는 레코드를 검 색하는 것이 주 기능이어서 대개의 경우 WHERE 절과 함께 사용. 
+# WHERE 절은 DELETE, UPDATE 등의 명령과 함께 삭제 및 변경할 레코드를 선택할 때도 사용. 
+# WHERE 절에는 레코드를 선택하는 조건문이 옴. 주로 필드와 특정값을 비교하는 조건문 형태로 작성
+SELECT * FROM tcity WHERE AREA >1000; # 면적이 1000제곱킬로미터 보다 큰 도시만 검색.
 
-# 테이블을 읽은 동작은 단순하지만 옵션이 굉장 히 많음.
-# 관심있는 필드만 읽거나 조건을 지정하여 일부 레코드 만 조회할 수 있고 
-# 정렬 기준을 지정하여 출력 순서를 조정할 수 있음. 그러다 보니 전체 문법이 상대적으로 복잡함.
-
-# 기본 형식
-# SELECT 필드목록 FROM 테이블 [WHERE 조건] [ORDER BY 정렬기준]
-
-# 옵션을 생략하면 SELECT 필드목록 FROM 테이블 이 되며 FROM 절의 테이블에서 필드를 읽어 출력하는 명령. 
-# SELECT와 FROM 사이에 필드목록에 출력할 필드의 이 름을 지정하되 * 기호를 쓰면 테이블의 모든 필드를 출력
-SELECT * FROM tcity; # tCity 테이블의 모든 필드를 출력하라는 뜻
-
-### 2. 필드목록
-# SELECT * 명령은 테이블 전체를 출력할 때 편리. 필드목록의 *는 모든 필드를 의미하며 All 또는 몽땅 이라도 읽음. 
-# 표기법이 짧아 입력하기 편하고 필드 이름을 몰라도 되므로 테이블을 살펴볼 때 간편, 
-# 그러나 필드가 많을 때는 느리고 출력 결과도 장황. 일부 필드만 출력하거나 
-# 순서를 직접 지정할 때는 SELECT 와 FROM 사이에 원하는 필드만 콤마로 구분하 여 적음. 
-# 목록에 있는 필드만 읽으니 빠르고 출력 결과도 짧음
-
-SELECT name AS "이름", depart AS "부서", gender AS "성별" FROM tstaff;
-	
-# 실무에선 부하를 줄이기 위해 전체 다 들고오는 * 을 잘 안씀.
-SELECT NAME, AREA, popu FROM tcity; # 지역과 도시명, 인구수를 출력하는 데 필드 순서를 마음대로 지정 가능.
-
-SELECT region, NAME, AREA FROM tcity;
-# 가능
-SELECT region, NAME, AREA, area FROM tcity;
-
-# 순서는 상관없음.
-SELECT NAME,AREA,popu,metro,region FROM tcity;
-# 둘다 같은 결과를 보여줌
-SELECT * FROM tcity;
-
-
-## 두 명령의 차이점
-# 어디서 차이가 발생하는가? 
-# => 테이블이 수정(컬럼을 추가하는 등)되면 결과가 달라짐  (테이블의 디자인이 바뀌게 되면 결과 값이 달 라짐)
-# 먼저 필드를 추가 되는 경우, 시장의 이름을 mayor 필 드에 추가하면 * 로 읽으면 
-# 새 필드를 인식 하지만, 필드를 적는 경우에는 따로 추가 해줘야 함. 필드를 수정하는
-# 경우, popu 필드를 ingu로 바꾸면 * 로 읽을 때는 에러가 없지만 결과셋에서
-#  popu 필드를 읽는 코드는 에러가 남.3
-# 단순 확인을 할 때는 *를  사용해도 되지만 실무에서는가급적 필드의 이름과 순서를 명확히 지정하는 것이 유리함.
-# *는 뭐뭐 들어 있는지 확인하는 용도로 사용함 
-
-/*
-	연습문제 1. 직원 테이블에서 이름과 부서, 직급 필드만 출력하라
-*/
-SELECT NAME,depart,grade FROM tstaff;
-
-
-### 3. 별명 
-# 필드면 [AS] "별명"
-
-# SELECT 명령이 출력하는 내용을 결과셋 Result Set 또 는 로우셋 Row Set 이라고 하는데 형태가 테이블과 동 일.
-# 원본 테이블의 일부만 읽어도 가로, 세로로 칸이 쳐진 도표 형태
-# 결과셋의 필드 캡션은 테이블에서 정의한 이름과 동 일. name 필드는 name이라고 출력하고, popu는 popu라고 출력. 
-
-#테이블의 필드명은 구분 가능하고 입력하기 쉬운 짧은 명칭일 뿐, 사용자가 읽기에는 직관적이지 못한 경우 가 많음. 
-#이 경우 필드에 대한 별명 Alias를 지정하며 결과셋의 헤더에 필드 이름 대신 별명을 출력. 
-#별명은 어디까지나 문자열일 뿐이므로 명칭 규칙에 영 향을 받지 않음. 공백이나 기호는 물론 모든 문자를 자유롭게 표기할 수 있음.
-
-SELECT NAME AS "도시명", AREA AS '면적(제곱Km)', popu AS "인구(만명)" FROM tcity;
-# "" 는 안써도 큰 문제는 없지만 특수문자등으로 오류가 날 수 있으니 습관적으로 하는 것이 좋다.
-
-# 기본형식 : 필드명 [AS] "별명"
-# 필드명과 별명 사이에 전치사 AS를 넣음. 생략해도 상 관없지만 자연어와 유사하고 직관적이므로 가급적 넣 는 것이 좋음.
-# 공백이나 특수 문자를 포함할 수 있어서 큰 따옴표로 감싸되 평이한 단어이면 따옴표 생략 가능
-
-
-# 다른 이유로도 별명을 사용하는데, 언어에 따라 명칭을 구성하는 규칙이 달라 특수한 이름을 읽지 못하는 경우가 있고,
-# DBMS 별로 키워드가 달라 필드명으로 쓰지 못하는 단어도 있다.
-# 결과셋에 별명을 붙이면 개발툴이나 DBMS에 상관없이 일관된 별명으로 필드를 읽을 수 있음.
-
-# 또 DBMS에 따라 큰 따옴표만 사용가능하거나, 작은 따옴표도 사용 가능한 경우가 있음.
-
-# SQL Server 는 아래의 구문도 가능하다.
-SELECT NAME AS "도시명", AREA AS "면적(제곱Km)", popu [인구( 만명)] FROM tcity;
-
-
-# 연습문제
-# 1. 결과창의 헤더에 다음과 같이 출 력되도록 필드 목록을 작성하라
-SELECT name AS '도시', popu AS '인구(만명)', region AS '지역' FROM tcity;
-
-# 2. 결과창에 다음과 같이 출력 되도록 필드를 수정하여라
-SELECT NAME AS "도시", popu AS "인구(만명)", region AS "지역" FROM tcity;
-
-### 4. 계산값 출력 <-- 필드 목록에 계산식
-# 필드 목록에 필드 이름을 적으면 필드 값이 그래도 출 력.
-# SELECT popu라고 하면 테이블의 인구수를 출력. 하지 만 popu 필드의 단위가 만명으로 되어 있어서 헷갈릴 수 있음.
-# 필드 목록에 계산식을 사용하면 테이블에 저장된 값을 가공하여 출력
-SELECT name, popu * 10000 AS "인구(명)" FROM tcity; # 이 경우 별명을 붙여 필드의 의미까지 정확히 기술하 는 것이 좋음.
-
-# 계산식을 사용하면 테이블에 있는 정보도 만들어서 표시할 수 있음
-SELECT NAME, AREA, popu, popu*10000/AREA AS "인구밀도" FROM tcity;
-
-# tCity 테이블에는 도시의 면적과 인구수 정보가 있는 데 
-# 이 둘을 계산하면 제곱킬로미터당 인구수인 인구밀 도를 구할 수 있음. 
-# 계산에 의해 구한 필드는 이름이 없으므로 설명적인 별명을 붙이는 것이 좋음.
-# as를 빼면 계산식의 가독성이 아주 나빠진다. 별명을 붙이자.
-
-# 계산식을 이용하면 원래 없었던 것을 만들 수 잇다.
-# 꼭 테이블에 있는 필드만 출력할 수 있는게 아니라, 테이블과 상관없는
-# 단순한 계산식도 출력 가능
-
-SELECT 60 * 60 * 24 AS "하루" FROM DUAL;
-SELECT 60*60*24*365 AS "1년" FROM DUAL;
-
-# 2024-02-01
-
-db_testdb_test`고객`
-CREATE TABLE 고객 (
- 고객아이디 VARCHAR(20) NOT NULL,
- 고객이름 VARCHAR(10) NOT NULL,
- 나이 INT,
- 등급 VARCHAR(10) NOT NULL,
- 직업 VARCHAR(20),
- 적립금 INT DEFAULT 0, PRIMARY KEY(고객아이디)
-);
-INSERT INTO 고객 VALUES ('apple', '정소화', 20, 'gold', '학생', 1000);
-INSERT INTO 고객 VALUES ('banana', '김선우', 25, 'vip', '간호사', 2500);
-INSERT INTO 고객 VALUES ('carrot', '고명석', 28, 'gold', '교사', 4500);
-INSERT INTO 고객 VALUES ('orange', '김용욱', 22, 'silver', '학생', 0);
-INSERT INTO 고객 VALUES ('melon', '성원용', 35, 'gold', '회사원', 5000);
-INSERT INTO 고객 VALUES ('peach', '오형준', NULL, 'silver', '의사', 300);
-INSERT INTO 고객 VALUES ('pear', '채광주', 31, 'silver', '회사원', 500);
-CREATE TABLE 제품 (
-제품번호 CHAR(3) NOT NULL,
-제품명 VARCHAR(20),
-재고량 INT,
-단가 INT,
-제조업체 VARCHAR(20), PRIMARY KEY(제품번호), CHECK (재고량 >= 0 AND 재고량 <=10000)
-);
-INSERT INTO 제품 VALUES ('p01', '그냥만두', 5000, 4500, '대한식품');
-INSERT INTO 제품 VALUES ('p02', '매운쫄면', 2500, 5500, '민국푸드');
-INSERT INTO 제품 VALUES ('p03', '쿵떡파이', 3600, 2600, '한빛제과');
-INSERT INTO 제품 VALUES ('p04', '맛난초콜릿', 1250, 2500, '한빛제과');
-INSERT INTO 제품 VALUES ('p05', '얼큰라면', 2200, 1200, '대한식품');
-INSERT INTO 제품 VALUES ('p06', '통통우동', 1000, 1550, '민국푸드');
-INSERT INTO 제품 VALUES ('p07', '달콤비스킷', 1650, 1500, '한빛제과');
-CREATE TABLE 주문 (
-주문번호 CHAR(3) NOT NULL,
-주문고객 VARCHAR(20),
-주문제품 CHAR(3),
-수량 INT,
-배송지 VARCHAR(30),
-주문일자 DATE, PRIMARY KEY(주문번호), FOREIGN KEY(주문고객) REFERENCES 고객(고객아이디), FOREIGN KEY(주문제품) REFERENCES 제품(제품번호)
-);
-INSERT INTO 주문 VALUES ('o01', 'apple', 'p03', 10, '서울시 마포구', '19/01/01');
-INSERT INTO 주문 VALUES ('o02', 'melon', 'p01', 5, '인천시 계양구', '19/01/10');
-INSERT INTO 주문 VALUES ('o03', 'banana', 'p06', 45, '경기도 부천시', '19/01/11');
-INSERT INTO 주문 VALUES ('o04', 'carrot', 'p02', 8, '부산시 금정구', '19/02/01');
-INSERT INTO 주문 VALUES ('o05', 'melon', 'p06', 36, '경기도 용인시', '19/02/20');
-INSERT INTO 주문 VALUES ('o06', 'banana', 'p01', 19, '충청북도 보은군', '19/03/02');
-INSERT INTO 주문 VALUES ('o07', 'apple', 'p03', 22, '서울시 영등포구', '19/03/15');
-INSERT INTO 주문 VALUES ('o08', 'pear', 'p02', 50, '강원도 춘천시', '19/04/10');
-INSERT INTO 주문 VALUES ('o09', 'banana', 'p04', 15, '전라남도 목포시', '19/04/11');
-INSERT INTO 주문 VALUES ('o10', 'carrot', 'p03', 20, '경기도 안양시', '19/05/22');
-
-# 1. 고객 테이블에서 고객아이디, 고객이름, 등급 속성을 검색해보자.
-SELECT `고객아이디`,`고객이름`,`등급` FROM `고객`;
-# ` 백틱을 이용하는게 좋다. 테이블 칼럼 딱 구분해줘서
-
-# 조건문 pdf 
-SELECT * FROM tcity WHERE AREA >1000;
-
-SELECT NAME, AREA FROM tcity WHERE AREA > 1000;
+SELECT NAME, AREA FROM tcity WHERE AREA > 1000; # 필드 목록에 * 대신 원하는 필드만 적으면 조건에 맞 는 레코드의 지정한 필드만 표시.
 
 SELECT NAME FROM tcity WHERE AREA > 1000;
 # 조건문이 맞는지 확인이 불가능해 이런것은 좋지않다.
 
+# 조건문은 필드와 상수, 변수 등을 표현식이되고 비교 대상끼리 타입이 호환되어야 함.
+# 정수형을 문자열과 비교한다거나 실수형을 날짜와 비 교해서는 안됨.
+
+/*
+조건문에 사용하는 비교 연산자 연산자 설명 
+예 A = B 같다. WHERE NAME = '서 울' 
+A > B A가 더 크다. WHERE area > 50 
+A < B A가 더 작다. WHERE popu < 100 
+A >= B A가 B보다 크거나 같다. WHERE popu >= 100 
+A <= B A가 B보다 작거나 같다. WHERE area <= 50 
+A <> B, A != B A와 B는 다르다. 또 는 같지 않다. WHERE region <> '경기'
+
 # A <> B, A != B  A와 B는 다르다. 또는 같지 않다.
-# ex) WHERE region <> '경기'
+# ex) WHERE region <> '경기' */
 
 # 숫자는 상수를 그냥 쓰지만 문자열과 날짜 상수는 항상 작음 따옴표로 감싸야함.
-# 이건 PDF 주면 그거봐라
-SELECT * FROM tcity WHERE name = '서울'; #맞다
 
-USE db_test;
-SELECT * FROM tcity;
+SELECT * FROM `tCity` WHERE `name` = '서울' #맞다
+
+SELECT * FROM `tCity` WHERE `name` = '서울' -- 맞음 
+SELECT * FROM tCity WHERE NAME = '서울' -- 맞음 
+SELECT * FROM tCity WHERE NAME = 서울 -- 틀림 
+SELECT * FROM tCity WHERE NAME = "서울" -- 틀림. 단, 마리아는 인정한다.
+# 따옴표없이 그냥 서울이라고 하면 이때의 서울은 필드 명을 의미.
+
+
 SELECT * FROM tcity WHERE metro = 'y';
 
 SELECT * FROM tcity WHERE metro = 'Y';
+
+# 필드의 영문자를 비교할 때는 대소문자 주의. 
+# SQL문 자체는 대소문자를 가리지 않아 키워드나 테이블명, 
+# 필드명을 아무렇게나 적어도 상관이 없지만,    필드안에 저장된 값은 대소문자를 구분. 
+# 필드값의 대소문자 구분 여부는 DBMS에 따라, 설정에 따라 다름. 
+# 어떤 DBMS를 사용하건 따옴표 내의 문자열 상수는 가 급적 대소문자를 정확히적는 것이 바람직.
+
+
+# 연습문제
 
 # 1. 인구가 10만명 미만인 도시의 이름을 출력하라.
 SELECT * FROM tcity WHERE popu <10;
@@ -202,23 +67,27 @@ SELECT NAME AS "직원이름", salary AS"월급" FROM tstaff WHERE salary >= 400
 # 정답은 밑에꺼지만 우선 위에꺼 부터 만들어 봐서 확인을 하고 밑에껄로 해야한다.
 SELECT NAME AS "직원이름" FROM tstaff WHERE salary >= 400;
 
-# null 비교 
+### 2. null 비교 
 # 값이 입력되어 있지 않은 특수한 상태를 표현.
 # 값을 알 수 없거나 결정할 수 없다는 뜻이며 0이나 빈 문자열과는 다름.
 # 필드를 선언할 때 NULL 가능성을 미리 지정.
+# 정보가 아직 조사되지 않았거나 모르는 상태일 때 이 필드를 NULL로 남겨 둠.
 # 선언문 뒤에 NULL 이 있으면 이 필드에는 값을 입력하지 않아도 된다는 뜻.
+
 # NOT NULL 로 선언되어 있으면 값이 없으면 레코드를 삽입할 수 없음.
 
 SELECT * FROM tstaff;
-# 필드명 = null 이라면. null 은 값이 아니라 상태임 그래서 안나옴
+# 필드명 = null 이라면.
+# NULL 값을 검색할려고 조건절에서 = NULL 로 작성. 
+# 하지만 NULL은 값이 아니라 상태이기 때문에 = 연산자 로 비교할 수 없음.
 
-SELECT * FROM tstaff WHERE score IS NULL; 
+SELECT * FROM tstaff WHERE score IS NULL; # 필드는 값이고 NULL은 상태라서 IS NULL 연산자를 따 로 제공.
 # null을 검색할때는 is null 을 하면 된다. 비교 연산자를 쓰면 안된다.
 
 SELECT * FROM tstaff WHERE score IS NOT NULL;
 # null 이 아니라는 조건은 IS NOT NULL로 표기.
 
-# 논리 연산자
+### 3. 논리 연산자
 
 SELECT * FROM tcity WHERE popu >= 100 AND AREA >= 700;
 
