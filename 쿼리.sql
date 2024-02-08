@@ -1,126 +1,101 @@
--- SHOW DATABASES;
--- CREATE DATABASE fpkm999test;
--- USE fpkm999test;
-# CREATE DATABASE Mydatabase;
--- SHOW DATABASES;
-
--- 테이블 새성
-
-CREATE TABLE tcity (
-	NAME CHAR(10) PRIMARY KEY,
-	area INT NULL,
-	popu INT NULL,
-	metro CHAR(1) NOT NULL,
-	region CHAR(6) NOT NULL
-	);
-USE db_test;
-SELECT * FROM tcity;
-# USE db_test;
-
- CREATE TABLE Employees (
-	EmployeeID INT PRIMARY KEY,
-	FirstName VARCHAR(50),
-	LastName VARCHAR(50),
-	Salary INT
-	);
-
- SELECT * FROM Employees;
- SELECT * FORM tcity;
-
-INSERT INTO tcity VALUES ('서울',605,974,'y','경기');
-INSERT INTO tcity VALUES ('부산',765,342,'y','경상');
-INSERT INTO tcity VALUES ('오산',42,21,'n','경기');
-INSERT INTO tcity VALUES ('청주',940,83,'n','충청');
-INSERT INTO tcity VALUES ('전주',205,65,'n','전라');
-INSERT INTO tcity VALUES ('순천',910,27,'n','전라');
-INSERT INTO tcity VALUES ('춘천',1116,27,'n','강원');
-INSERT INTO tcity VALUES ('홍천',1819,7,'n','강원');
-SELECT *FROM db_test.tcity; 
 SHOW DATABASES;
-SELECT *FROM tcity;
-CREATE TABLE tStaff 
-(
-	NAME CHAR (15) PRIMARY KEY,
-	depart CHAR (10) NOT NULL,
-	gender CHAR (3) NOT NULL,
-	joindate DATE NOT NULL,
-	grade CHAR (10) NOT NULL,
-	salary INT NOT NULL,
-	score DECIMAL(5,2) NULL	
-	);
-INSERT INTO tStaff VALUES ('김유신','총무부','남','2000-2-3','이사',420,88.8);
-INSERT INTO tStaff VALUES ('유관순','영업부','여','2009-3-1','과장',380, NULL);
-INSERT INTO tStaff VALUES ('안중근','인사과','남','2012-5-5','대리',256,76.5);
-INSERT INTO tStaff VALUES ('윤봉길','영업부','남','2015-8-15','과장',350,71.25);
-INSERT INTO tStaff VALUES ('강감찬','영업부','남','2018-10-9','사원',320,56.0);
-INSERT INTO tStaff VALUES ('정몽주','총무부','남','2010-9-16','대리',370,89.5);
-INSERT INTO tStaff VALUES ('허난설헌','인사과','여','2020-1-5','사원',285,44.5);
-INSERT INTO tStaff VALUES ('신사임당','영업부','여','2013-6-19','부장',400,92.0);
-INSERT INTO tStaff VALUES ('성삼문','영업부','남','2014-6-8','대리',285,87.75);
-INSERT INTO tStaff VALUES ('논개','인사과','여','2010-9-16','대리',340,46.2);
-INSERT INTO tStaff VALUES ('황진이','인사과','여','2012-5-5','사원',275,52.5);
-INSERT INTO tStaff VALUES ('이율곡','총무부','남','2016-3-8','과장',385,65.4);
-INSERT INTO tStaff VALUES ('이사부','총무부','남','2000-2-3','대리',375,50);
-INSERT INTO tStaff VALUES ('안창호','영업부','남','2015-8-15','사원',370,74.2);
-INSERT INTO tStaff VALUES ('을지문덕','영업부','남','2019-6-29','사원',330, NULL);
-INSERT INTO tStaff VALUES ('정약용','총무부','남','2020-3-14','과장',380,69.8);
-INSERT INTO tStaff VALUES ('홍길동','인사과','남','2019-8-8','차장',380,77.7);
-INSERT INTO tStaff VALUES ('대조영','총무부','남','2020-7-7','차장',290,49.9);
-INSERT INTO tStaff VALUES ('장보고','인사과','남','2005-4-1','부장',440,58.3);
-INSERT INTO tStaff VALUES ('선덕여왕','인사과','여','2017-8-3','사원',315,45.1);
-
-
-SELECT * FROM tstaff;
-SELECT * FROM tcity;
-
+SHOW TABLES;
+### 1. 기본 형식 
+# SELECT는 테이블의 데이터를 읽어 출력하는 이 동작을 조회라고 함. 
+# 테이블을 조회하는 것은 가장 기본적인 동작이며 SELECT 문은 모든 SQL 명령중 사 용 빈도가 압도적으로 높음
 # 도시명과 인구수에만 관심이 있다면.
-SELECT NAME, popu FROM tcity;
+
+
+# 테이블을 읽은 동작은 단순하지만 옵션이 굉장 히 많음.
+# 관심있는 필드만 읽거나 조건을 지정하여 일부 레코드 만 조회할 수 있고 
+# 정렬 기준을 지정하여 출력 순서를 조정할 수 있음. 그러다 보니 전체 문법이 상대적으로 복잡함.
+
+# 기본 형식
+# SELECT 필드목록 FROM 테이블 [WHERE 조건] [ORDER BY 정렬기준]
+
+# 옵션을 생략하면 SELECT 필드목록 FROM 테이블 이 되며 FROM 절의 테이블에서 필드를 읽어 출력하는 명령. 
+# SELECT와 FROM 사이에 필드목록에 출력할 필드의 이 름을 지정하되 * 기호를 쓰면 테이블의 모든 필드를 출력
+SELECT * FROM tcity; # tCity 테이블의 모든 필드를 출력하라는 뜻
+
+### 2. 필드목록
+# SELECT * 명령은 테이블 전체를 출력할 때 편리. 필드목록의 *는 모든 필드를 의미하며 All 또는 몽땅 이라도 읽음. 
+# 표기법이 짧아 입력하기 편하고 필드 이름을 몰라도 되므로 테이블을 살펴볼 때 간편, 
+# 그러나 필드가 많을 때는 느리고 출력 결과도 장황. 일부 필드만 출력하거나 
+# 순서를 직접 지정할 때는 SELECT 와 FROM 사이에 원하는 필드만 콤마로 구분하 여 적음. 
+# 목록에 있는 필드만 읽으니 빠르고 출력 결과도 짧음
 
 SELECT name AS "이름", depart AS "부서", gender AS "성별" FROM tstaff;
-
-# gui 안쓰고 gender 변수의 char3 크기를 4로 변경할려고 한다면.
-ALTER TABLE `tstaff` CHANGE COLUMN `gender` `gender` CHAR(4) NOT NULL COLLATE 'utf8mb4_general_ci' AFTER `depart`;
 	
 # 실무에선 부하를 줄이기 위해 전체 다 들고오는 * 을 잘 안씀.
-SELECT NAME,AREA,popu FROM tcity;
+SELECT NAME, AREA, popu FROM tcity; # 지역과 도시명, 인구수를 출력하는 데 필드 순서를 마음대로 지정 가능.
+
 SELECT region, NAME, AREA FROM tcity;
 # 가능
 SELECT region, NAME, AREA, area FROM tcity;
 
 # 순서는 상관없음.
 SELECT NAME,AREA,popu,metro,region FROM tcity;
-SELECT * FROM tcity;
 # 둘다 같은 결과를 보여줌
+SELECT * FROM tcity;
 
+
+## 두 명령의 차이점
 # 어디서 차이가 발생하는가? 
-# => 테이블이 수정(컬럼을 추가하는 등)되면 결과가 달라짐
+# => 테이블이 수정(컬럼을 추가하는 등)되면 결과가 달라짐  (테이블의 디자인이 바뀌게 되면 결과 값이 달 라짐)
 # 먼저 필드를 추가 되는 경우, 시장의 이름을 mayor 필 드에 추가하면 * 로 읽으면 
 # 새 필드를 인식 하지만, 필드를 적는 경우에는 따로 추가 해줘야 함. 필드를 수정하는
 # 경우, popu 필드를 ingu로 바꾸면 * 로 읽을 때는 에러가 없지만 결과셋에서
-#  popu 필드를 읽는 코드는 에러가 남.
-# 실무적으로는 *을 쓰지 않음. *는 뭐뭐 들어 있는지 확인하는 용도로 사용함 
-
+#  popu 필드를 읽는 코드는 에러가 남.3
+# 단순 확인을 할 때는 *를  사용해도 되지만 실무에서는가급적 필드의 이름과 순서를 명확히 지정하는 것이 유리함.
+# *는 뭐뭐 들어 있는지 확인하는 용도로 사용함 
 
 /*
-	문제 1. 직원 테이블에서 이름과 부서, 직급 필드만 출력하라
+	연습문제 1. 직원 테이블에서 이름과 부서, 직급 필드만 출력하라
 */
 SELECT NAME,depart,grade FROM tstaff;
 
 
-# 별명 
+### 3. 별명 
 # 필드면 [AS] "별명"
+
+# SELECT 명령이 출력하는 내용을 결과셋 Result Set 또 는 로우셋 Row Set 이라고 하는데 형태가 테이블과 동 일.
+# 원본 테이블의 일부만 읽어도 가로, 세로로 칸이 쳐진 도표 형태
+# 결과셋의 필드 캡션은 테이블에서 정의한 이름과 동 일. name 필드는 name이라고 출력하고, popu는 popu라고 출력. 
+
+#테이블의 필드명은 구분 가능하고 입력하기 쉬운 짧은 명칭일 뿐, 사용자가 읽기에는 직관적이지 못한 경우 가 많음. 
+#이 경우 필드에 대한 별명 Alias를 지정하며 결과셋의 헤더에 필드 이름 대신 별명을 출력. 
+#별명은 어디까지나 문자열일 뿐이므로 명칭 규칙에 영 향을 받지 않음. 공백이나 기호는 물론 모든 문자를 자유롭게 표기할 수 있음.
+
 SELECT NAME AS "도시명", AREA AS '면적(제곱Km)', popu AS "인구(만명)" FROM tcity;
 # "" 는 안써도 큰 문제는 없지만 특수문자등으로 오류가 날 수 있으니 습관적으로 하는 것이 좋다.
 
+# 기본형식 : 필드명 [AS] "별명"
+# 필드명과 별명 사이에 전치사 AS를 넣음. 생략해도 상 관없지만 자연어와 유사하고 직관적이므로 가급적 넣 는 것이 좋음.
+# 공백이나 특수 문자를 포함할 수 있어서 큰 따옴표로 감싸되 평이한 단어이면 따옴표 생략 가능
 
+
+# 다른 이유로도 별명을 사용하는데, 언어에 따라 명칭을 구성하는 규칙이 달라 특수한 이름을 읽지 못하는 경우가 있고,
+# DBMS 별로 키워드가 달라 필드명으로 쓰지 못하는 단어도 있다.
+# 결과셋에 별명을 붙이면 개발툴이나 DBMS에 상관없이 일관된 별명으로 필드를 읽을 수 있음.
+
+# 또 DBMS에 따라 큰 따옴표만 사용가능하거나, 작은 따옴표도 사용 가능한 경우가 있음.
+
+# SQL Server 는 아래의 구문도 가능하다.
 SELECT NAME AS "도시명", AREA AS "면적(제곱Km)", popu [인구( 만명)] FROM tcity;
 
+
+# 연습문제
+# 1. 결과창의 헤더에 다음과 같이 출 력되도록 필드 목록을 작성하라
+SELECT name AS '도시', popu AS '인구(만명)', region AS '지역' FROM tcity;
 
 # 2. 결과창에 다음과 같이 출력 되도록 필드를 수정하여라
 SELECT NAME AS "도시", popu AS "인구(만명)", region AS "지역" FROM tcity;
 
-# 계산값 출력
-SELECT name, popu * 10000 AS "인구(명)" FROM tcity;
+### 4. 계산값 출력 <-- 필드 목록에 계산식
+# 필드 목록에 필드 이름을 적으면 필드 값이 그래도 출 력.
+# SELECT popu라고 하면 테이블의 인구수를 출력. 하지 만 popu 필드의 단위가 만명으로 되어 있어서 헷갈릴 수 있음.
+# 필드 목록에 계산식을 사용하면 테이블에 저장된 값을 가공하여 출력
+SELECT name, popu * 10000 AS "인구(명)" FROM tcity; # 이 경우 별명을 붙여 필드의 의미까지 정확히 기술하 는 것이 좋음.
 
 # 계산식을 사용하면 테이블에 있는 정보도 만들어서 표시할 수 있음
 SELECT NAME, AREA, popu, popu*10000/AREA AS "인구밀도" FROM tcity;
