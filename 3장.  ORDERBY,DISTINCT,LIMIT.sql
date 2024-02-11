@@ -94,7 +94,6 @@ SELECT * FROM tstaff WHERE depart ='영업부' ORDER by joindate;
 
 ### 2. DISTINCT -  중복제거 ###
 
-
 SELECT region FROM tcity;
 
 # 도시 테이블에서 region 필드만 읽어 도시가 속한 지역의 목록을 조사.
@@ -114,8 +113,8 @@ SELECT DISTINCT region FROM tcity ORDER BY region;
 
 # distinct 의 반대는 ALL 임  # ALL : 중복 제거 없이 모든 레코드를 출력함
 # 출력의 디폴트 값이 ALL 이라 굳이 지정해서 쓰지는 않음
-SELECT ALL depart FROM tstaff;
 
+SELECT ALL depart FROM tstaff;
 SELECT  depart FROM tstaff; # 위와 결과는 동일함
 
 SELECT DISTINCT depart FROM tstaff; # 회사에 어떤 부서가 있는지 조사할 경우 DISTINCT 키워드를 붙이면 중복 부서명을 합쳐 한 번씩만 보여줌.
@@ -139,8 +138,6 @@ SELECT * FROM tstaff WHERE joindate LIKE '202%';
 SELECT DISTINCT depart FROM tstaff WHERE joindate LIKE '202%';
 
 
-
-
 ### 3. LIMIT - 행수를 제한 #마리아db 와 mysql 에만 있는 기능 ###
 # 인덱스처럼 0번 부터 시작함
 # LIMIT 구문으로 행수를 제한.
@@ -150,7 +147,6 @@ SELECT DISTINCT depart FROM tstaff WHERE joindate LIKE '202%';
 
 SELECT * FROM tcity ORDER BY AREA DESC; 
 SELECT * FROM tcity ORDER BY AREA DESC LIMIT 4; # 면적이 넓은 상위 4개 도시를 구하는 구문.
-
 
 # 위와 아래 문장은 같다.
 SELECT * FROM tcity ORDER BY AREA DESC LIMIT 0,4;
@@ -202,6 +198,7 @@ SELECT * FROM tcity WHERE metro = 'n' ORDER BY AREA DESC LIMIT 2,3;
 
 # limit 을 쓴다고 해서 부하가 줄어 들지는 않는다. 제일 마지막에 수행하기 때문.
 
+# 연습문제
 # 1. 직원월급을 월급순으로 낮은 순서로 정렬한 후 12위에서 16위 까지 출력하라.
 # 월급이 같은 경우에는 이름을 가나다라 순서로 하라.
 SELECT * FROM tstaff;

@@ -98,12 +98,12 @@ CREATE TABLE tOrder
 -- 주문 데이터
 INSERT INTO tOrder (member,item,orderDate,num,status) VALUES ('춘향','청바지','2019-12-3',3,2);
 INSERT INTO tOrder (member,item,orderDate,num,status) VALUES ('향단','대추','2019-12-4',10,1);
-INSERT INTO tOrder (member,item,orderDate,num,status) VALUES ('방자','전자담배','2019-12-2',4,1);
+INSERT INTO tOrder (MEMBER,item,orderDate,num,status) VALUES ('방자','전자담배','2019-12-2',4,1);
 INSERT INTO tOrder (member,item,orderDate,num,status) VALUES ('향단','사과','2019-12-5',5,2);
 INSERT INTO tOrder (member,item,orderDate,num,status) VALUES ('흥부','노트북','2019-12-5',2,1);
 INSERT INTO tOrder (member,item,orderDate,num,status) VALUES ('방자','핸드폰','2019-11-1',1,3);
 
-# 서브 쿼리(SubQuery)는 '쿼리문 안에 또 다른 쿼리문이 포함된 구문'.
+### 1. 서브 쿼리(SubQuery)는 '쿼리문 안에 또 다른 쿼리문이 포함된 구문'.
 # 단발적인 질문이 아닌 '복합적이고 단계적인 질문을 할 때는 여러 개의 쿼리를 중첩해서 사용.'
 
 # SQL문을 실행할 때, 추가로 필요한 데이터를 조회할 때 사용합니다. 
