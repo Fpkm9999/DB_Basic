@@ -1,5 +1,9 @@
 
 ### ORDER BY - 정렬 ###
+
+# 기본형식
+# SELECT 필드목록 FROM 테이블 [WHERE 조건] [ORDER  BY 정렬기준]
+ 
 # SELECT 명령에 별 지정이 없을 경우 레코드의 출력 순 서는 DBMS의 디폴트 순서를 따름. 
 # 오라클은 입력 순서을 기억해 그대로 출력하고, MariaDB는 기본키에 대해 오름차순(ASC)으로 정렬. 
 # 관계형 DB에서 레코드의 물리적 순서는 큰 의미가 없 고, 대신 출력할 때 ORDER BY 절로 정 렬 순서를 원하는대로 지정.
@@ -18,7 +22,10 @@ SELECT * FROM tcity ORDER BY popu DESC; # 인구수를 기준으로 내림차순
 # ORDER BY 다음에 정렬 기준 필드를 적고 오름차순 일 경우 ASC 키워드를,
 # 내림차순일 경우 DESC 키워드를 지정. 순서를 생략하면 디폴트인 오름차순으로 적용 되므로 키워드 ASC는 보통 생략하는편.
 
+
+
 # 두 개 이상의 기준 필드를 지정할 수 있음.
+
 ## 첫 번째 기준 필드의 값이 같으면, 두번 째 기준 필드를 비교하여 정렬 순서를 결정. ##
 select region, name, area, popu from tcity order by region, name DESC;	# 지역별로 정렬하되 같은 지역에 속한 도시끼리는 이름의 내림 차순으로 정렬.
 # ORDER BY 뒤에 기준 필드를 콤마로 구분하여 나열하되 각 기준별로 오름차순과 내림차순을 따로 지정 가능함.
@@ -26,6 +33,7 @@ select region, name, area, popu from tcity order by region, name DESC;	# 지역�
 # 1차 정렬 기준인 지역이 같으면 2차 기준인 이름 순으로 정렬하되 이때는 DESC 내림차순으로 정렬.
 
 select region, name, area, popu from tcity order by region ASC, name DESC; # 위와 동일한 결과를 보여줌
+
 # region 기준이 같은 강원의 경우 두번 째 기준 필드인 홍천과 춘천이 ASC or DESC에 따라 달라짐, 지역이 경기도 마찬가지로 오산과 서울도 바뀜
 select region, name, area, popu from tcity order by region asc, name ASC;
 
@@ -60,7 +68,7 @@ SELECT * FROM tcity ORDER BY 3;
 SELECT name, popu * 10000 / area FROM tCity ORDER BY popu * 10000 / AREA; 
 
 # 탕상 계산에 별명을 지어서 사용함.
-SELECT name, popu * 10000 / area AS tmp FROM tCity ORDER BY tmp;	 // 인구수와 면적으로 계산한 인구밀도의 오름차순으로 도시를 정렬
+SELECT name, popu * 10000 / area AS tmp FROM tCity ORDER BY tmp;	 # 인구수와 면적으로 계산한 인구밀도의 오름차순으로 도시를 정렬
 
 # 정렬 기준을 꼭 같이 출력할 필요는 없지만 제대로 정 렬했는지 확인하기 위해 인구밀도를 같이 출력.
 
