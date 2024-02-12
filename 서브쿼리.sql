@@ -104,6 +104,7 @@ INSERT INTO tOrder (member,item,orderDate,num,status) VALUES ('흥부','노트�
 INSERT INTO tOrder (member,item,orderDate,num,status) VALUES ('방자','핸드폰','2019-11-1',1,3);
 
 ### 1. 서브 쿼리(SubQuery)는 '쿼리문 안에 또 다른 쿼리문이 포함된 구문'.
+
 # 단발적인 질문이 아닌 '복합적이고 단계적인 질문을 할 때는 여러 개의 쿼리를 중첩해서 사용.'
 
 # SQL문을 실행할 때, 추가로 필요한 데이터를 조회할 때 사용합니다. 
@@ -128,10 +129,11 @@ INSERT INTO tOrder (member,item,orderDate,num,status) VALUES ('방자','핸드�
 
 # 우리의 목적은 SQL 문장을 코드에 넣는게 목적
 
-# case1. 단일행 서브쿼리
+## case1. 단일행 서브쿼리
 
 # SELECT 명령은 DB 엔진에게 정보를 요구하는 질문.
-# SELECT로 할 수 있는 질문은 아주 짧은 단문만 가능하면 FROM 절이 하나밖에 없어 한 테이블에있는 정보만 조사할 수 있었음.
+# SELECT로 할 수 있는 질문은 아주 짧은 단문만 가능하면 FROM 절이 하나밖에 없어 
+# 한 테이블에있는 정보만 조사할 수 있었음.
 
 # 하지만 실제 작업을 할 때는 복잡한 여러 단계의 질문을 한꺼번에 하는 경우가 많이 생김.
 
@@ -147,9 +149,8 @@ SELECT MAX(popu) FROM tcity; # 전체 도시 인구중 가장 큰 값을 조사
 # 최대 인구수를 알았으니 이제 이 인구수를 가진 도시를 찾음
 SELECT NAME FROM tcity WHERE popu = 974; # 결과는 서울
 # 최대 인구수를 조사하고 이 수로부터 도시의 이름글 구해야 하니 두 번의 쿼리가 필요함.
-# 목적은 달성했지만 사람이 첫 번째 쿼리의 결과를 확인한 후 두 번쨰 쿼리의 조건문을 직접 기입하는 식이라 불편한.
-# 
-
+# 목적은 달성했지만 사람이 첫 번째 쿼리의 결과를 확인한 후 두 번쨰 쿼리의 조건문을 직접 기입하는 식이라
+#불편함.
 
 # 이 둘을 묶어 주는게 서브쿼리
 
@@ -158,7 +159,6 @@ SELECT NAME FROM tcity WHERE popu = (SELECT MAX(popu) FROM tcity);
 # 괄호로 묶는 이유 : 괄호안에 있는 문장부터 먼저 실행해서 974를 구하고 쿼리문을 실행하도록 하기 위함
 
 # 한번에 서울을 구함 DB 엔진은 괄호 안의 서브 쿼리를 먼저 실행하여 최대 인구수를 구함.
-#
 
 SELECT MAX(num) FROM titem; # titem 테이블의 num 필드 중 최대값은 80.
 # 이제 이 최대량으로 부터 num 필드가 80개인 상품을 조사.
@@ -172,6 +172,10 @@ SELECT item FROM titem WHERE num = (SELECT max(num) FROM titem);
 # 결과 : 청바지
 
 # 단일행 서브쿼리는 쉬운편임.
+# 단일행 서브쿼리는 하나의 결과만 리턴하며 주로 WHERE, HAVING 등의 조건절에 사용. 
+# 복합 질문의 앞쪽 질문에 해당하는 값을 서브 쿼리로 조사해 놓고 외부쿼리에서
+#  그 결과값 을 사용하는 식으로 작성.
+
 
 # 문제
 # 1. tstaff 에서 성취도가 제일 높은 직원을 조사하라.
@@ -202,69 +206,13 @@ SELECT MEMBER,addr from tmember WHERE age = (SELECT MAX(age) FROM tmember);
 
 
 
-
-# 시험 준비 
-
-CREATE TABLE Book (
-bookId INT PRIMARY KEY,
-bookName VARCHAR(40),
-publisher VARCHAR(40),
-price INT
-);
-
-CREATE TABLE Customer (
-customerId INT PRIMARY KEY,
-name VARCHAR(40),
-address VARCHAR(50),
-phone VARCHAR(20)
-);
-
-CREATE TABLE Orders (
-orderId INT PRIMARY KEY,
-customerId INT REFERENCES Customer(customerId),
-bookId INT REFERENCES Book(bookId),
-salePrice INT,
-orderDate DATE
-);
-
--- Book, Customer, Orders 데이터 생성
-INSERT INTO Book VALUES(1, '축구의 역사', '굿스포츠', 7000);
-INSERT INTO Book VALUES(2, '축구 아는 여자', '나무수', 13000);
-INSERT INTO Book VALUES(3, '축구의 이해', '대한미디어', 22000);
-INSERT INTO Book VALUES(4, '골프 바이블', '대한미디어', 35000);
-INSERT INTO Book VALUES(5, '피겨 교본', '굿스포츠', 8000);
-INSERT INTO Book VALUES(6, '배구 단계별기술', '굿스포츠', 6000);
-INSERT INTO Book VALUES(7, '야구의 추억', '이상미디어', 20000);
-INSERT INTO Book VALUES(8, '야구를 부탁해', '이상미디어', 13000);
-INSERT INTO Book VALUES(9, '올림픽 이야기', '삼성당', 7500);
-INSERT INTO Book VALUES(10, 'Olympic Champions', 'Pearson', 13000);
-
-
-INSERT INTO Customer VALUES (1, '박지성', '영국 맨체스터', '000-5000-0001');
-INSERT INTO Customer VALUES (2, '김연아', '대한민국 서울', '000-6000-0001');
-INSERT INTO Customer VALUES (3, '김연경', '대한민국 경기도', '000-7000-0001');
-INSERT INTO Customer VALUES (4, '추신수', '미국 클리블랜드', '000-8000-0001');
-INSERT INTO Customer VALUES (5, '박세리', '대한민국 대전', NULL);
-
-INSERT INTO Orders VALUES (1, 1, 1, 6000, '2024-07-01');
-INSERT INTO Orders VALUES (2, 1, 3, 21000, '2024-07-03');
-INSERT INTO Orders VALUES (3, 2, 5, 8000, '2024-07-03');
-INSERT INTO Orders VALUES (4, 3, 6, 6000, '2024-07-04');
-INSERT INTO Orders VALUES (5, 4, 7, 20000, '2024-07-05');
-INSERT INTO Orders VALUES (6, 1, 2, 12000, '2024-07-07');
-INSERT INTO Orders VALUES (7, 4, 8, 13000, '2024-07-07');
-INSERT INTO Orders VALUES (8, 3, 10, 12000, '2024-07-08');
-INSERT INTO Orders VALUES (9, 2, 10, 7000, '2024-07-09');
-INSERT INTO Orders VALUES (10, 3, 8, 13000, '2024-07-10');
-
-
 ### 2. 서브쿼리 중첩 ###
 
 # 서브쿼리는 독립적인 하나의 명령이기 때문에 외부쿼리와는 '다른 테이블을 읽을 수도 있음'.
-# 어짜피 순차적으로 실행되므로 '두 쿼ㅣ리문의 FROM 절에 각각 다른 테이블을 지정해도 상관이 없음'.
+# 어짜피 순차적으로 실행되므로 '두 쿼리문의 FROM 절에 각각 다른 테이블을 지정해도 상관이 없음'.
 
 # 그래서 더 복잡한 형태의 질문도 가능
-# 청바지 배송비가 얼마인지 조사
+# e.g ) 청바지 배송비가 얼마인지 조사
 # 청바지는 상품 테이블 titem 에 있지만 배송비는 유형 테이블 tcategory 에 있어서 두 테이블을 읽어야함.
 # 먼저 titem 테이블에서 청바지는 어떤 유형의 카테고리인지 조사
 
@@ -279,6 +227,9 @@ SELECT delivery FROM tcategory WHERE category ='패션'; # 배송비는 2000원�
 
 # DB엔진이 서브쿼리를 먼저 실행하고 그 결과를 외부쿼리에 쓰듯이 사고의 흐름 순서대로 명령문을 하나씩 작성하면 됨.
 # 이 질문을 말로 표현해 보면 '청바지의 유형을 조사하고 그유형의 배송비를 출력하라'임
+select delivery from tcategory where category = (
+select category from titem where item='청바지');
+
 
 # 7만원짜리 상품을 구입한 사람의 나이를 조사하라.
 SELECT * FROM tcategory;
@@ -294,7 +245,8 @@ SELECT age FROM tmember WHERE MEMBER =
 ( SELECT MEMBER FROM torder WHERE item = 
 (SELECT item FROM titem WHERE price = 70000)); # 방자라는 사람의 나이를 조사.
 
-# 지금까지 단일행이라 문제가 없었는데 혹시나 상품이 여러 개이거나 구입한 사람이 둘 이상이라면 에러 처리가 되는데
+# 지금까지 단일행이라 문제가 없었는데 혹시나 상품이 여러 개이거나 구입한 사람이 둘 이상이라
+# 에러 처리가 되는데
 # 이떄는 TOP 1 (LIMIT 1) 을 넣어 첫 구입자를 찾으면 됨.
 
 
@@ -302,16 +254,19 @@ SELECT age FROM tmember WHERE MEMBER =
 # 1. 대추를 구입한 회원의 이름과 이 회원의 예치금을 구하라.
 SELECT MEMBER, money FROM tmember WHERE MEMBER =
 (SELECT member FROM torder WHERE item='대추');
+
+
 # 2. 춘향이가 구입한 상품의 가격을 조사하라
 SELECT price FROM titem WHERE item = 
-(SELECT item FROM torder WHERE MEMBER =
-(SELECT member FROM tmember WHERE MEMBER ='춘향'));
+(SELECT item FROM torder WHERE MEMBER = '춘향');
 # 3. 배송비가 2000원인 상품을 구매한 회원의 주소를 조사하라.
 
 SELECT MEMBER,addr FROM tmember WHERE MEMBER = 
 (SELECT member FROM torder WHERE item = 
 (SELECT item FROM titem WHERE category = 
 (SELECT category FROM tcategory WHERE delivery = 2000)));
+
+
 # 4. 배송비가 3000원인 상품을 구매한 회원의 주소 하나를 조사하라.
 SELECT MEMBER,addr FROM tmember WHERE MEMBER =
 (SELECT member FROM torder WHERE item = 
@@ -350,6 +305,10 @@ SELECT item, price FROM titem WHERE item IN
 
 # = 연산자의 경우 결과값에 따라 에러가 뜰 수 있는데
 # in 연산자를 이용할 경우 결과값에 관계없이 에러에 대응을 할 수 있음.
+
+
+## IN은 = 과 달리 여러 개의 값과 비교. ## 
+
 
 ### 4. 다중열 서브쿼리
 
