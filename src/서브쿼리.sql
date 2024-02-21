@@ -391,3 +391,10 @@ select * from tmaker;
 ## 3개의 데이터 가 같다
 
 select * from tcar, tmaker where tCar.maker = tMaker.maker;
+
+
+select bookName from book where publisher in (
+                              select publisher from book group by publisher having max(price)
+                               > avg(price) ) having max(price);
+
+
