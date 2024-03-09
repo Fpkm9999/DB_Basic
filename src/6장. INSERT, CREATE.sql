@@ -7,7 +7,7 @@
 # 새로운 레코드를 추가하는 명령. 
 # INSERT 문을 스크립트로 작성해 놓으면 많은 데이터를 순차적으로 입력할 수 있어서 편리
 # 마리아DB는 INTO 생략을 허용하지만 SQL 표준에는 INTO가 필수임. 생략하는 습관 ㄴㄴ
-
+SHOW DATABASES;
 SELECT * FROM tcity;
 INSERT INTO tcity (NAME,AREA,popu,metro,region) VALUES ('서울',605,974,'y','경기');
 # PRIMIARY KEY로 설정된 NAME 필드는 NULL 허용 X, 중복 허용 X
